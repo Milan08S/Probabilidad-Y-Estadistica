@@ -1,0 +1,87 @@
+---
+title: "Riesgo Cardiovascular"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#FFFFFF"
+      fg: "#00AEFF" 
+      primary: "#FFFFFF"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+# Install thematic and un-comment for themed static plots (i.e., ggplot2)
+# thematic::thematic_rmd()
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(ggplot2)
+cvd <- read_excel("C:/Users/migue/Downloads/CVD_cleaned.xls")
+```
+
+Column {data-width=650 .tabset}
+-----------------------------------------------------------------------
+
+### Sexo
+
+```{r, echo=FALSE}
+ta= c(cvd$Sex)
+t1=table(ta)
+pie(t1, col=c("#023047", "#f4d35e", "#ee964b"), main="Sexo")
+```
+
+### Historial de Fumadores
+
+```{r, echo = FALSE}
+tc= c(cvd$Smoking_History)
+t3=table(tc)
+pie(t3, col=c("#023047", "#f4d35e", "#ee964b"), main ="Historial de Fumadores")
+```
+
+
+### Salud General
+
+```{r, echo=FALSE}
+ev <- table(cvd$General_Health)
+barplot(ev, main = "Estado General de Salud")
+```
+Column
+------------------------------------
+
+Row {.tabset .tabset-fade}
+-----------------------------------
+   
+   
+### Altura vs Peso
+
+```{r, echo = FALSE}
+cvd$`Weight_(kg)` <- as.numeric(cvd$`Weight_(kg)`)
+
+cvd$`Height_(cm)` <- as.numeric(cvd$`Height_(cm)`)
+x1 = cvd$`Weight_(kg)`
+y1 = cvd$`Height_(cm)`
+fig = ggplot(data = cvd, aes(x= x1, y = y1), main = "Altura vs Peso") + geom_point()
+
+fig
+```   
+ 
+### Tasa del BMI
+    
+```{r, echo=FALSE}
+cvd$BMI <- as.numeric(cvd$BMI)
+plot(density(na.omit(cvd$BMI)), main = "Distribucion de tasa de BMI", lwd = 5, las = 1)
+```
+
+### Analisis
+    
+```{r}
+```
+
+Segun las tablas podemos deducir de que en base a los datos del BMI son asimetricos a la derecha, estando la mayoria de personas por enciam del rango del BMI considerado como saludable, a pesar de esto la mayor parte de los sujetos consideran que su salud esta de bien a excelente ademas de que el 78% de la poblacion dice hacer ejercicio y mas del 60% dice no fumar, por ultimo cabe aclarar de que al parecer segun la tabla de Altura vs Peso, estos no tiene una correlacion entre si, lo cual es errado teniendo en cuenta que el propio BMI es un calculo que se basa en estas dos variables.
+
+
